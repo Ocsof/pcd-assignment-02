@@ -1,0 +1,8 @@
+target = ass01.concurrent.ConcurrentBodySimulationMain
+
+classpath=build/classes/java/main
+
+listener=gov.nasa.jpf.listener.PreciseRaceDetector
+listener=gov.nasa.jpf.listener.DeadlockAnalyzer
+
+report.console.property_violation=error,trace,snapshot
