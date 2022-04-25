@@ -1,11 +1,11 @@
-package it.unibo.pcd.assignment.event.collector;
+package ass02.parser.event.collector;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import it.unibo.pcd.assignment.event.report.ClassReportImpl;
-import it.unibo.pcd.assignment.event.report.FieldInfoImpl;
-import it.unibo.pcd.assignment.event.report.MethodInfoImpl;
+import ass02.parser.event.report.ClassReportImpl;
+import ass02.parser.event.report.FieldInfoImpl;
+import ass02.parser.event.report.MethodInfoImpl;
 
 import java.util.ArrayList;
 import java.util.List;

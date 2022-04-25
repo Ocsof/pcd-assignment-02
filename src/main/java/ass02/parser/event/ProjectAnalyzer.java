@@ -1,10 +1,10 @@
-package it.unibo.pcd.assignment.event;
+package ass02.parser.event;
 
 import io.vertx.core.Future;
-import it.unibo.pcd.assignment.event.report.ClassReport;
-import it.unibo.pcd.assignment.event.report.InterfaceReport;
-import it.unibo.pcd.assignment.event.report.PackageReport;
-import it.unibo.pcd.assignment.event.report.ProjectReport;
+import ass02.parser.event.report.ClassReport;
+import ass02.parser.event.report.InterfaceReport;
+import ass02.parser.event.report.PackageReport;
+import ass02.parser.event.report.ProjectReport;
 
 import java.util.function.Consumer;
 

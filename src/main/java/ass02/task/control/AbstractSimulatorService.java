@@ -25,6 +25,8 @@ public abstract class AbstractSimulatorService extends AbstractSimulator{
         this.futureList = new HashSet<>();
         this.nWorkers = poolSize;
         this.executor = Executors.newFixedThreadPool(poolSize);
+        this.createVelocityTasks();
+        this.createPositionTasks();
     }
 
     @Override
@@ -32,12 +34,12 @@ public abstract class AbstractSimulatorService extends AbstractSimulator{
         int iter = 0;
         /* simulation loop */
         while (iter < this.getnSteps()) {
-            this.createVelocityTasks();
+            //this.createVelocityTasks();
             for (ComputeTaskVelocity taskVelocity : this.velocityTasks) {
                 this.futureList.add(this.executor.submit(taskVelocity));
             }
             this.getFuture();
-            this.createPositionTasks();
+            //this.createPositionTasks();
             for (ComputeTaskPosition taskPosition : this.positionTasks) {
                 this.futureList.add(this.executor.submit(taskPosition));
             }

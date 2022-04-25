@@ -1,4 +1,4 @@
-package it.unibo.pcd.assignment.event.collector;
+package ass02.parser.event.collector;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -6,10 +6,10 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.SourceRoot;
-import it.unibo.pcd.assignment.event.report.ClassReportImpl;
-import it.unibo.pcd.assignment.event.report.MethodInfo;
-import it.unibo.pcd.assignment.event.report.PackageReportImpl;
-import it.unibo.pcd.assignment.event.report.ProjectReportImpl;
+import ass02.parser.event.report.ClassReportImpl;
+import ass02.parser.event.report.MethodInfo;
+import ass02.parser.event.report.PackageReportImpl;
+import ass02.parser.event.report.ProjectReportImpl;
 
 import java.io.IOException;
 import java.nio.file.Paths;

@@ -1,4 +1,4 @@
-package it.unibo.pcd.assignment.event.report;
+package ass02.parser.event.report;
 
 import java.util.ArrayList;
 import java.util.List;

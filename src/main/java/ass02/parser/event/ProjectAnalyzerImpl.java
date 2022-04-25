@@ -1,4 +1,4 @@
-package it.unibo.pcd.assignment.event;
+package ass02.parser.event;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -12,11 +12,11 @@ import com.github.javaparser.utils.SourceRoot;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import it.unibo.pcd.assignment.event.collector.ClassCollector;
-import it.unibo.pcd.assignment.event.collector.InterfaceCollector;
-import it.unibo.pcd.assignment.event.collector.PackageCollector;
-import it.unibo.pcd.assignment.event.collector.ProjectCollector;
-import it.unibo.pcd.assignment.event.report.*;
+import ass02.parser.event.collector.ClassCollector;
+import ass02.parser.event.collector.InterfaceCollector;
+import ass02.parser.event.collector.PackageCollector;
+import ass02.parser.event.collector.ProjectCollector;
+import ass02.parser.event.report.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package it.unibo.pcd.assignment.event;
+package ass02.parser.event;
 
 public class TestJavaParser {
 

@@ -1,6 +1,6 @@
-package it.unibo.pcd.assignment.event.report;
+package ass02.parser.event.report;
 
-import it.unibo.pcd.assignment.event.ProjectElem;
+import ass02.parser.event.ProjectElem;
 
 import java.util.List;
 
