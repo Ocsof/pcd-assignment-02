@@ -17,7 +17,7 @@ public class ConcurrentBodySimulationMain {
 
     	SimulationView viewer = new SimulationView(620,620);
 
-        int nSteps = 50000;
+        int nSteps = 10000;
         int nBody = 1000;
         int nWorkers = Runtime.getRuntime().availableProcessors() + 1;
         //int nWorkers = 9;

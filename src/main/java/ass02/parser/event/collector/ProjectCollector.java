@@ -33,14 +33,12 @@ public class ProjectCollector {
         List<CompilationUnit> allCus = parseResultList.stream()
                 .filter(ParseResult::isSuccessful)
                 .filter(r -> r.getResult().isPresent())
-                .map(r -> r.getResult().get())
-                .collect(Collectors.toList());
+                .map(r -> r.getResult().get()).toList();
 
         List<PackageDeclaration> cuPack = allCus.stream()
                 .filter(c -> c.getPackageDeclaration().isPresent())
                 .map(c -> c.getPackageDeclaration().get())
-                .distinct()
-                .collect(Collectors.toList());
+                .distinct().toList();
 
         PackageCollector packageCollector = new PackageCollector();
         List<PackageReportImpl> packageReportList = new ArrayList<>();

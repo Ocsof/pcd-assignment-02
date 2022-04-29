@@ -29,10 +29,9 @@ public class PackageCollector extends VoidVisitorAdapter<PackageReportImpl> {
 
         // classes/interfaces report
         List<CompilationUnit> classesOrInterfacesUnit = this.createParsedFileList(dec).stream()
-                                                                                      .filter(ParseResult::isSuccessful)
-                                                                                      .filter(r -> r.getResult().isPresent())
-                                                                                      .map(r -> r.getResult().get())
-                                                                                      .collect(Collectors.toList());
+                .filter(ParseResult::isSuccessful)
+                .filter(r -> r.getResult().isPresent())
+                .map(r -> r.getResult().get()).toList();
 
         ClassCollector classCollector = new ClassCollector();
         List<ClassReportImpl> classReports = new ArrayList<>();
@@ -44,8 +43,7 @@ public class PackageCollector extends VoidVisitorAdapter<PackageReportImpl> {
             List<ClassOrInterfaceDeclaration> declarationList = cu.getTypes().stream()
                     .map(TypeDeclaration::asTypeDeclaration)
                     .filter(BodyDeclaration::isClassOrInterfaceDeclaration)
-                    .map(x -> (ClassOrInterfaceDeclaration) x)
-                    .collect(Collectors.toList());
+                    .map(x -> (ClassOrInterfaceDeclaration) x).toList();
 
             for (ClassOrInterfaceDeclaration declaration : declarationList) {
                 ClassReportImpl classReport = new ClassReportImpl();

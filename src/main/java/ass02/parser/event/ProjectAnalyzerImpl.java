@@ -45,7 +45,6 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
             InterfaceReportImpl interfaceReport = new InterfaceReportImpl();
             InterfaceCollector interfaceCollector = new InterfaceCollector();
             interfaceCollector.visit(compilationUnit, interfaceReport);
-            System.out.println(interfaceReport);
             promise.complete(interfaceReport);
         });
     }
@@ -63,7 +62,6 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
             ClassReportImpl classReport = new ClassReportImpl();
             ClassCollector classCollector = new ClassCollector();
             classCollector.visit(compilationUnit, classReport);
-            System.out.println(classReport);
             promise.complete(classReport);
         });
     }
@@ -109,8 +107,7 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
                 .map(r -> r.getResult().get())
                 .filter(c -> c.getPackageDeclaration().isPresent())
                 .map(c -> c.getPackageDeclaration().get())
-                .distinct()
-                .collect(Collectors.toList());
+                .distinct().toList();
 
         for (PackageDeclaration packageDeclaration : allCus) {
             // visito il package e per ciascuna classe/interfaccia...
@@ -120,16 +117,14 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
             List<CompilationUnit> classesOrInterfacesUnit = this.createParsedFileList(packageDeclaration)
                     .stream()
                     .filter(r -> r.getResult().isPresent() && r.isSuccessful())
-                    .map(r -> r.getResult().get())
-                    .collect(Collectors.toList());
+                    .map(r -> r.getResult().get()).toList();
 
             for (CompilationUnit cu : classesOrInterfacesUnit) {
 
                 List<ClassOrInterfaceDeclaration> declarationList = cu.getTypes().stream()
                         .map(TypeDeclaration::asTypeDeclaration)
                         .filter(BodyDeclaration::isClassOrInterfaceDeclaration)
-                        .map(x -> (ClassOrInterfaceDeclaration) x)
-                        .collect(Collectors.toList());
+                        .map(x -> (ClassOrInterfaceDeclaration) x).toList();
 
                 for (ClassOrInterfaceDeclaration declaration : declarationList) {
                     if (declaration.isInterface()) {

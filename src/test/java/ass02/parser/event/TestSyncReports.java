@@ -1,16 +1,16 @@
 package ass02.parser.event;
 
+import ass02.parser.event.collector.ClassCollector;
+import ass02.parser.event.collector.InterfaceCollector;
+import ass02.parser.event.collector.PackageCollector;
+import ass02.parser.event.collector.ProjectCollector;
+import ass02.parser.event.report.ClassReportImpl;
+import ass02.parser.event.report.InterfaceReportImpl;
+import ass02.parser.event.report.PackageReportImpl;
+import ass02.parser.event.report.ProjectReportImpl;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
-import it.unibo.pcd.assignment.event.collector.ClassCollector;
-import it.unibo.pcd.assignment.event.collector.InterfaceCollector;
-import it.unibo.pcd.assignment.event.collector.PackageCollector;
-import it.unibo.pcd.assignment.event.collector.ProjectCollector;
-import it.unibo.pcd.assignment.event.report.ClassReportImpl;
-import it.unibo.pcd.assignment.event.report.InterfaceReportImpl;
-import it.unibo.pcd.assignment.event.report.PackageReportImpl;
-import it.unibo.pcd.assignment.event.report.ProjectReportImpl;
 import org.junit.Test;
 
 import java.io.File;

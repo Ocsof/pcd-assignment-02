@@ -1,7 +1,8 @@
 package ass02.parser.event;
 
+import ass02.parser.event.report.InterfaceReport;
 import io.vertx.core.Future;
-import it.unibo.pcd.assignment.event.report.InterfaceReport;
+
 
 public class TestAsyncInterfaceReport {
 
