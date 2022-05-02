@@ -108,10 +108,11 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
                 .filter(c -> c.getPackageDeclaration().isPresent())
                 .map(c -> c.getPackageDeclaration().get())
                 .distinct().toList();
-
+        System.out.println("Elenco package:");
+        System.out.println(allCus.toString());
         for (PackageDeclaration packageDeclaration : allCus) {
             // visito il package e per ciascuna classe/interfaccia...
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAA"+packageDeclaration.getNameAsString());
+            System.out.println(packageDeclaration.getNameAsString());
 
             // classes/interfaces report
             List<CompilationUnit> classesOrInterfacesUnit = this.createParsedFileList(packageDeclaration)
@@ -130,7 +131,7 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
                     if (declaration.isInterface()) {
                         this.getInterfaceReport("src/main/java/"+declaration.getFullyQualifiedName().get().replace(".", "/")+".java").onComplete(e -> {
                                     if(e.succeeded()){
-                                        System.out.println(e.result().toString());
+                                        System.out.println(e.result());
                                         callback.accept(e.result());
                                     }
                                 }
@@ -138,7 +139,7 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
                     } else {
                         this.getClassReport("src/main/java/"+declaration.getFullyQualifiedName().get().replace(".", "/")+".java").onComplete(e -> {
                                     if(e.succeeded()){
-                                        System.out.println(e.result().toString());
+                                        System.out.println(e.result());
                                         callback.accept(e.result());
                                     }
                                 }

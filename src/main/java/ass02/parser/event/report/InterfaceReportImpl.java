@@ -38,7 +38,7 @@ public class InterfaceReportImpl implements InterfaceReport {
 
     @Override
     public String toString() {
-        return "InterfaceReportImpl: " + interfaceName + '\n' +
+        return "Interface name: " + interfaceName + '\n' +
                 "File Name: " + fullFileName + '\n' +
                 "Methods: " + methodNameList + '\n' + '\n';
     }
