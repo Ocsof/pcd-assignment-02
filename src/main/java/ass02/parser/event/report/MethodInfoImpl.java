@@ -63,13 +63,13 @@ public class MethodInfoImpl implements MethodInfo {
 
     @Override
     public String toString() {
-        return "MethodInfoImpl{" +
-                "name='" + name + '\'' +
-                ", modifiers='" + modifiers + '\'' +
-                ", beginLine=" + beginLine +
-                ", endBeginLine=" + endBeginLine +
-                ", isMain=" + isMain +
-                ", parentClass=" + parentClass.getFullClassName() +
+        return "\n{\n" +
+                "\tname='" + name + "'," + "\n" +
+                "\tmodifiers='" + modifiers + "'," + "\n" +
+                "\tbeginLine=" + beginLine + "," + "\n" +
+                "\tendBeginLine=" + endBeginLine + "," + "\n" +
+                "\tisMain=" + isMain + "," + "\n" +
+                "\tparentClass=" + parentClass.getFullClassName() + "\n" +
                 '}';
     }
 }

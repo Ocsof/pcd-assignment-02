@@ -47,7 +47,7 @@ public class ViewController {
 
     public void stopAnalysisPressed(ActionEvent e) {
         try {
-            this.projectAnalyzer.getVertx().undeploy(projectAnalyzer.deploymentID());
+            this.projectAnalyzer.getVertx().close();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -66,6 +66,20 @@ public class ViewController {
     }
 
     public void log(String message) {
-        this.outputConsole.append(message + "\n");
+        int indentation = 0;
+        switch(message.substring(0,3)){
+            case "Cla":
+                    this.increaseClassNumber();
+                    indentation = 6;
+                    break;
+            case "Int":
+                    this.increaseInterfaceNumber();
+                    indentation = 6;
+                    break;
+            case "Pac":
+                    this.increasePackageNumber();
+        }
+
+        this.outputConsole.append(message.indent(indentation) + "\n");
     }
 }

@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static java.lang.Thread.sleep;
+
 public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnalyzer {
 
     public ProjectAnalyzerImpl() {
@@ -108,11 +110,12 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
                 .filter(c -> c.getPackageDeclaration().isPresent())
                 .map(c -> c.getPackageDeclaration().get())
                 .distinct().toList();
-        System.out.println("Elenco package:");
-        System.out.println(allCus.toString());
+
         for (PackageDeclaration packageDeclaration : allCus) {
-            // visito il package e per ciascuna classe/interfaccia...
-            System.out.println(packageDeclaration.getNameAsString());
+            // genero report fittizi dei package con solo il nome, chiamando la callback per ciascuno
+            PackageReportImpl packageNameReport = new PackageReportImpl();
+            packageNameReport.setFullPackageName(packageDeclaration.getNameAsString());
+            callback.accept(packageNameReport);
 
             // classes/interfaces report
             List<CompilationUnit> classesOrInterfacesUnit = this.createParsedFileList(packageDeclaration)

@@ -34,10 +34,10 @@ public class FieldInfoImpl implements FieldInfo {
 
     @Override
     public String toString() {
-        return "FieldInfoImpl{" +
-                "name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", parentClass=" + parentClass.getFullClassName() +
+        return "\n{\n" +
+                "\tname='" + name + "'," + "\n" +
+                "\ttype='" + type + "'," + "\n" +
+                "\tsparentClass=" + parentClass.getFullClassName() + "\n" +
                 '}';
     }
 }

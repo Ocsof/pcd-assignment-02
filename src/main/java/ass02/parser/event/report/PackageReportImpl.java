@@ -36,7 +36,11 @@ public class PackageReportImpl implements PackageReport {
 
     @Override
     public String toString() {
-        return "PackageReportImpl: " + fullPackageName + '\n' +
+        if(this.classReports == null){
+            return "Package Name: " + fullPackageName;
+        }
+
+        return "Package Name: " + fullPackageName + '\n' +
                 "Classes: " + classReports.toString() + '\n' +
                 "Interfaces: " + interfaceReports.toString() + '\n' + '\n';
     }
