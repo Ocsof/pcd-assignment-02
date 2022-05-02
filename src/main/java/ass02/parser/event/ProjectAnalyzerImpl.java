@@ -1,5 +1,6 @@
 package ass02.parser.event;
 
+import ass02.parser.model.report.*;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
@@ -12,10 +13,10 @@ import com.github.javaparser.utils.SourceRoot;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import ass02.parser.event.collector.ClassCollector;
-import ass02.parser.event.collector.InterfaceCollector;
-import ass02.parser.event.collector.PackageCollector;
-import ass02.parser.event.collector.ProjectCollector;
+import ass02.parser.model.collector.ClassCollector;
+import ass02.parser.model.collector.InterfaceCollector;
+import ass02.parser.model.collector.PackageCollector;
+import ass02.parser.model.collector.ProjectCollector;
 import ass02.parser.event.report.*;
 
 import java.io.File;
@@ -24,7 +25,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
 

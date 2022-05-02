@@ -1,8 +1,8 @@
-package ass02.parser.event.collector;
+package ass02.parser.model.collector;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import ass02.parser.event.report.InterfaceReportImpl;
+import ass02.parser.model.report.InterfaceReportImpl;
 
 import java.util.ArrayList;
 import java.util.List;

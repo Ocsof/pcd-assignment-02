@@ -1,5 +1,8 @@
-package ass02.parser.event.collector;
+package ass02.parser.model.collector;
 
+import ass02.parser.model.report.ClassReportImpl;
+import ass02.parser.model.report.InterfaceReportImpl;
+import ass02.parser.model.report.PackageReportImpl;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
@@ -9,15 +12,11 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.utils.SourceRoot;
-import ass02.parser.event.report.ClassReportImpl;
-import ass02.parser.event.report.InterfaceReportImpl;
-import ass02.parser.event.report.PackageReportImpl;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PackageCollector extends VoidVisitorAdapter<PackageReportImpl> {
 

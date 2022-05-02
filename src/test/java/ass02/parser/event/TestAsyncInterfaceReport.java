@@ -1,6 +1,6 @@
 package ass02.parser.event;
 
-import ass02.parser.event.report.InterfaceReport;
+import ass02.parser.model.report.InterfaceReport;
 import io.vertx.core.Future;
 
 

@@ -1,11 +1,11 @@
-package ass02.parser.event.collector;
+package ass02.parser.model.collector;
 
+import ass02.parser.model.report.FieldInfoImpl;
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import ass02.parser.event.report.ClassReportImpl;
-import ass02.parser.event.report.FieldInfoImpl;
-import ass02.parser.event.report.MethodInfoImpl;
+import ass02.parser.model.report.ClassReportImpl;
+import ass02.parser.model.report.MethodInfoImpl;
 
 import java.util.ArrayList;
 import java.util.List;

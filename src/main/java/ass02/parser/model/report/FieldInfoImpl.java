@@ -1,4 +1,4 @@
-package ass02.parser.event.report;
+package ass02.parser.model.report;
 
 public class FieldInfoImpl implements FieldInfo {
     private String name;

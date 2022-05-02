@@ -1,4 +1,4 @@
-package ass02.parser.event.collector;
+package ass02.parser.model.collector;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -6,16 +6,15 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.SourceRoot;
-import ass02.parser.event.report.ClassReportImpl;
-import ass02.parser.event.report.MethodInfo;
-import ass02.parser.event.report.PackageReportImpl;
-import ass02.parser.event.report.ProjectReportImpl;
+import ass02.parser.model.report.ClassReportImpl;
+import ass02.parser.model.report.MethodInfo;
+import ass02.parser.model.report.PackageReportImpl;
+import ass02.parser.model.report.ProjectReportImpl;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProjectCollector {
 

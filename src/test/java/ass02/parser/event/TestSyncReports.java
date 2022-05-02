@@ -1,13 +1,13 @@
 package ass02.parser.event;
 
-import ass02.parser.event.collector.ClassCollector;
-import ass02.parser.event.collector.InterfaceCollector;
-import ass02.parser.event.collector.PackageCollector;
-import ass02.parser.event.collector.ProjectCollector;
-import ass02.parser.event.report.ClassReportImpl;
-import ass02.parser.event.report.InterfaceReportImpl;
-import ass02.parser.event.report.PackageReportImpl;
-import ass02.parser.event.report.ProjectReportImpl;
+import ass02.parser.model.collector.ClassCollector;
+import ass02.parser.model.collector.InterfaceCollector;
+import ass02.parser.model.collector.PackageCollector;
+import ass02.parser.model.collector.ProjectCollector;
+import ass02.parser.model.report.ClassReportImpl;
+import ass02.parser.model.report.InterfaceReportImpl;
+import ass02.parser.model.report.PackageReportImpl;
+import ass02.parser.model.report.ProjectReportImpl;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;

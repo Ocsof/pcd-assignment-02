@@ -1,4 +1,4 @@
-package ass02.parser.event.report;
+package ass02.parser.model.report;
 
 import com.github.javaparser.utils.Pair;
 import ass02.parser.event.ProjectElem;

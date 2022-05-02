@@ -1,10 +1,10 @@
 package ass02.parser.event;
 
 import io.vertx.core.Future;
-import ass02.parser.event.report.ClassReport;
-import ass02.parser.event.report.InterfaceReport;
-import ass02.parser.event.report.PackageReport;
-import ass02.parser.event.report.ProjectReport;
+import ass02.parser.model.report.ClassReport;
+import ass02.parser.model.report.InterfaceReport;
+import ass02.parser.model.report.PackageReport;
+import ass02.parser.model.report.ProjectReport;
 
 import java.util.function.Consumer;
 
