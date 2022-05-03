@@ -17,7 +17,6 @@ import ass02.parser.model.collector.ClassCollector;
 import ass02.parser.model.collector.InterfaceCollector;
 import ass02.parser.model.collector.PackageCollector;
 import ass02.parser.model.collector.ProjectCollector;
-import ass02.parser.event.report.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
