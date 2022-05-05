@@ -1,6 +1,5 @@
-package ass02.reactiveparser.view;
-import ass02.parser.event.view.ViewController;
-import ass02.reactiveparser.controller.ViewControllerReactive;
+package ass02.parser.reactive.view;
+import ass02.parser.reactive.controller.ViewControllerReactive;
 
 import javax.swing.*;
 import java.awt.*;

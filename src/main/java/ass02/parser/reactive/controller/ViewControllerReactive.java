@@ -1,9 +1,10 @@
-package ass02.reactiveparser.controller;
+package ass02.parser.reactive.controller;
 
-import ass02.reactiveparser.view.ViewFrame;
-import ass02.reactiveparser.ReactiveProjectAnalyzer;
-import io.reactivex.rxjava3.disposables.Disposable;
+import ass02.parser.reactive.view.ViewFrame;
+import ass02.parser.reactive.model.ReactiveProjectAnalyzerImpl;
+import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,15 +15,48 @@ public class ViewControllerReactive {
     public static int PACKAGE_NUMBER = 0;
     private final JTextArea outputConsole;
     private final ViewFrame view;
-    private final ReactiveProjectAnalyzer projectAnalyzer;
+    private final ReactiveProjectAnalyzerImpl projectAnalyzer;
     private boolean isStopped;
-    private Disposable process;
+    private Scheduler.Worker workerProcess;
     private String projectPath;
 
     public ViewControllerReactive() {
-        this.projectAnalyzer = new ReactiveProjectAnalyzer();
+        this.projectAnalyzer = new ReactiveProjectAnalyzerImpl();
         this.view = new ViewFrame(this);
         this.outputConsole = view.getConsoleTextArea();
+        this.setObservers();
+    }
+
+    private void setObservers() {
+        this.listenIncreasePackageNumber();
+        this.listenIncreaseInterfaceNumber();
+        this.listenIncreaseClassNumber();
+        this.listenReportObserver();
+    }
+
+    private void listenReportObserver() {
+        this.projectAnalyzer.getReportObservable()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(res -> {
+                    if (!this.isStopped) {
+                        view.getConsoleTextArea().append(res + "");
+                    }
+                });
+    }
+
+    private void listenIncreaseClassNumber() {
+        this.projectAnalyzer.getClassNumberObservable().subscribeOn(Schedulers.computation())
+                .subscribe(res -> this.increaseClassNumber());;
+    }
+
+    private void listenIncreaseInterfaceNumber() {
+        this.projectAnalyzer.getInterfaceNumberObservable().subscribeOn(Schedulers.computation())
+                .subscribe(res -> this.increaseInterfaceNumber());
+    }
+
+    private void listenIncreasePackageNumber() {
+        this.projectAnalyzer.getPackageNumberObservable().subscribeOn(Schedulers.computation())
+                .subscribe(res -> this.increasePackageNumber());
     }
 
     public void openProjectPressed(ActionEvent e) {
@@ -38,9 +72,9 @@ public class ViewControllerReactive {
         if (!this.projectPath.isEmpty()) {
             this.isStopped = false;
             this.clearTextArea();
-            this.process = Schedulers.computation().scheduleDirect(() ->
-                    this.projectAnalyzer.analyzeProject(this.projectPath)
-            );
+            this.workerProcess = Schedulers.computation().createWorker();
+            this.workerProcess.schedule( () -> this.projectAnalyzer.analyzeProject(this.projectPath) );
+
             //this.projectAnalyzer.analyzeProject(this.projectPath, (k) -> this.log(k.toString()));
         }
     }
@@ -58,7 +92,7 @@ public class ViewControllerReactive {
 
     public void stopAnalysisPressed(ActionEvent e) {
         this.isStopped = true;
-        this.process.dispose();
+        this.workerProcess.dispose();
     }
 
     public void increasePackageNumber() {
