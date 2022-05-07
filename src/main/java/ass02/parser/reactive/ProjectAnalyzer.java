@@ -4,6 +4,7 @@ import ass02.parser.model.report.ClassReport;
 import ass02.parser.model.report.InterfaceReport;
 import ass02.parser.model.report.PackageReport;
 import ass02.parser.model.report.ProjectReport;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -27,20 +28,7 @@ public interface ProjectAnalyzer {
      * @param srcClassPath
      * @return
      */
-    Observable<ClassReport> getClassReportObservable();
-
-    void requestClassReportGeneration(String srcClassPath);
-
-    /**
-     * Async method to retrieve the report about a package,
-     * given the full path of the package folder
-     *
-     * @param srcPackagePath
-     * @return
-     */
-    Observable<PackageReport> getPackageReportObservable();
-
-    void requestPackageReportGeneration(String srcPackagePath);
+    Maybe<ClassReport> getClassReport(String srcClassPath);
 
     /**
      * Async method to retrieve the report about a project
@@ -56,7 +44,6 @@ public interface ProjectAnalyzer {
      * executing the callback each time a project element is found
      *
      * @param srcProjectFolderName
-     * @param callback
      */
-    void analyzeProject(String srcProjectFolderName, Consumer<ProjectElem> callback);
+    Observable<String> analyzeProject(String srcProjectFolderName);
 }

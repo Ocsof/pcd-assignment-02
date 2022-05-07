@@ -1,11 +1,10 @@
 package ass02.parser.reactive.view;
-import ass02.parser.reactive.controller.ViewControllerReactive;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ViewFrame extends JFrame{
-        private final ViewControllerReactive controller;
+        private final ViewController controller;
         private JButton openProjectButton;
         private JButton startAnalysisButton;
         private JButton stopAnalysisButton;
@@ -18,7 +17,7 @@ public class ViewFrame extends JFrame{
         private JScrollPane centralPanel;
         private JPanel bottomPanel;
 
-        public ViewFrame(ViewControllerReactive controller) {
+        public ViewFrame(ViewController controller) {
             this.controller = controller;
             this.setSize(1200, 620);
             this.setLocationRelativeTo(null);
