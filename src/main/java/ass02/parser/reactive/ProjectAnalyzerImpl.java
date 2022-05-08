@@ -74,21 +74,33 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
 
     @Override
     public Observable<String> analyzeProject(String srcProjectFolderName) {
-        SourceRoot sourceRoot = new SourceRoot(Paths.get(srcProjectFolderName)).setParserConfiguration(new ParserConfiguration());
-        List<ParseResult<CompilationUnit>> parseResultList;
-        parseResultList = sourceRoot.tryToParseParallelized("");
+
         // mi prendo i vari package che compongono il progetto
+        /*
         List<PackageDeclaration> allCus = parseResultList.stream()
                 .filter(r -> r.getResult().isPresent() && r.isSuccessful())
                 .map(r -> r.getResult().get())
                 .filter(c -> c.getPackageDeclaration().isPresent())
                 .map(c -> c.getPackageDeclaration().get())
                 .distinct().toList();
-
-        return Observable.fromIterable(allCus)
+        */
+        return Observable.<PackageDeclaration>create(emitter -> {
+                    SourceRoot sourceRoot = new SourceRoot(Paths.get(srcProjectFolderName)).setParserConfiguration(new ParserConfiguration());
+                    List<ParseResult<CompilationUnit>> parseResultList;
+                    parseResultList = sourceRoot.tryToParseParallelized("");
+                    List<PackageDeclaration> allCus = parseResultList.stream()
+                            .filter(r -> r.getResult().isPresent() && r.isSuccessful())
+                            .map(r -> r.getResult().get())
+                            .filter(c -> c.getPackageDeclaration().isPresent())
+                            .map(c -> c.getPackageDeclaration().get())
+                            .distinct().toList();
+                    System.out.println("[CUS creation] " + Thread.currentThread());
+                    allCus.forEach(emitter::onNext);
+                })
+                .subscribeOn(Schedulers.computation())
                 .concatMap(packageDeclaration -> Observable.just(packageDeclaration)
-                        .subscribeOn(Schedulers.computation())
                         .flatMap(p -> Observable.create(emitter -> {
+                            System.out.println("[Package exploration] " + Thread.currentThread());
                             PackageReportImpl packageNameReport = new PackageReportImpl();
                             packageNameReport.setFullPackageName(p.getNameAsString());
                             emitter.onNext(packageNameReport.toString());
@@ -109,7 +121,10 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
                                 for (ClassOrInterfaceDeclaration declaration : declarationList) {
                                     if (declaration.isInterface()) {
                                         this.getInterfaceReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
-                                                .blockingSubscribe(report -> emitter.onNext(report.toString()));
+                                                .blockingSubscribe(report -> {
+                                                    emitter.onNext(report.toString());
+                                                    System.out.println("[ReportInterfaceGenerated] " + Thread.currentThread());
+                                                });
                                     } else {
                                         this.getClassReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
                                                 .blockingSubscribe(report -> emitter.onNext(report.toString()));

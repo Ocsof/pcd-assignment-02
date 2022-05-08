@@ -4,6 +4,7 @@ import ass02.parser.reactive.ProjectAnalyzerImpl;
 import ass02.parser.reactive.view.ViewFrame;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import javax.swing.*;
@@ -16,7 +17,7 @@ public class ViewController {
     private final JTextArea outputConsole;
     private final ViewFrame view;
     private final ProjectAnalyzerImpl projectAnalyzer;
-    private Scheduler.Worker workerProcess;
+    private Disposable disposable;
 
     private String projectPath;
 
@@ -38,9 +39,8 @@ public class ViewController {
     public void startAnalysisPressed(ActionEvent e) {
         if (!this.projectPath.isEmpty()) {
             this.clearTextArea();
-            this.workerProcess = Schedulers.computation().createWorker();
-            this.workerProcess.schedule( () -> this.projectAnalyzer.analyzeProject(this.projectPath)
-                    .blockingSubscribe(this::log));
+            this.disposable = this.projectAnalyzer.analyzeProject(this.projectPath)
+                    .subscribe(this::log);
         }
     }
 
@@ -56,7 +56,7 @@ public class ViewController {
     }
 
     public void stopAnalysisPressed(ActionEvent e) {
-        this.workerProcess.dispose();
+        this.disposable.dispose();
     }
 
     public void increasePackageNumber() {
@@ -72,20 +72,22 @@ public class ViewController {
     }
 
     public void log(String message) {
-        int indentation = 0;
-        switch(message.substring(0,3)){
-            case "Cla":
+        SwingUtilities.invokeLater(() -> {
+            int indentation = 0;
+            switch(message.substring(0,3)){
+                case "Cla":
                     this.increaseClassNumber();
                     indentation = 6;
                     break;
-            case "Int":
+                case "Int":
                     this.increaseInterfaceNumber();
                     indentation = 6;
                     break;
-            case "Pac":
+                case "Pac":
                     this.increasePackageNumber();
-        }
+            }
 
-        this.outputConsole.append(message.indent(indentation) + "\n");
+            this.outputConsole.append(message.indent(indentation) + "\n");
+        });
     }
 }
