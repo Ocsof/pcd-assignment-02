@@ -13,7 +13,6 @@ public class ViewController {
     private final JTextArea outputConsole;
     private final ViewFrame view;
     private final ProjectAnalyzerImpl projectAnalyzer;
-
     private String projectPath;
 
     public ViewController() {

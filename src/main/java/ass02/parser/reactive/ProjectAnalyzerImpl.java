@@ -99,6 +99,7 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
                 })
                 .subscribeOn(Schedulers.computation())
                 .concatMap(packageDeclaration -> Observable.just(packageDeclaration)
+                        .subscribeOn(Schedulers.computation())
                         .flatMap(p -> Observable.create(emitter -> {
                             System.out.println("[Package exploration] " + Thread.currentThread());
                             PackageReportImpl packageNameReport = new PackageReportImpl();
@@ -121,10 +122,7 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
                                 for (ClassOrInterfaceDeclaration declaration : declarationList) {
                                     if (declaration.isInterface()) {
                                         this.getInterfaceReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
-                                                .blockingSubscribe(report -> {
-                                                    emitter.onNext(report.toString());
-                                                    System.out.println("[ReportInterfaceGenerated] " + Thread.currentThread());
-                                                });
+                                                .blockingSubscribe(report -> emitter.onNext(report.toString()));
                                     } else {
                                         this.getClassReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
                                                 .blockingSubscribe(report -> emitter.onNext(report.toString()));
@@ -142,11 +140,7 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
         private List<ParseResult<CompilationUnit>> createParsedFileList(PackageDeclaration dec) {
             SourceRoot sourceRoot = new SourceRoot(Paths.get("src/main/java/")).setParserConfiguration(new ParserConfiguration());
             List<ParseResult<CompilationUnit>> parseResultList;
-            try {
-                parseResultList = sourceRoot.tryToParse(dec.getNameAsString());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            parseResultList = sourceRoot.tryToParseParallelized(dec.getNameAsString());
             return parseResultList;
         }
 

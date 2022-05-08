@@ -93,64 +93,71 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
 
     @Override
     public void analyzeProject(String srcProjectFolderName, Consumer<ProjectElem> callback) {
-        SourceRoot sourceRoot = new SourceRoot(Paths.get(srcProjectFolderName)).setParserConfiguration(new ParserConfiguration());
-        List<ParseResult<CompilationUnit>> parseResultList;
+        this.getVertx().executeBlocking(promise -> {
+            SourceRoot sourceRoot = new SourceRoot(Paths.get(srcProjectFolderName)).setParserConfiguration(new ParserConfiguration());
+            List<ParseResult<CompilationUnit>> parseResultList;
 
-        try {
-            parseResultList = sourceRoot.tryToParse("");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            try {
+                parseResultList = sourceRoot.tryToParse("");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-        // mi prendo i vari package che compongono il progetto
-        List<PackageDeclaration> allCus = parseResultList.stream()
-                .filter(r -> r.getResult().isPresent() && r.isSuccessful())
-                .map(r -> r.getResult().get())
-                .filter(c -> c.getPackageDeclaration().isPresent())
-                .map(c -> c.getPackageDeclaration().get())
-                .distinct().toList();
-
-        for (PackageDeclaration packageDeclaration : allCus) {
-            // genero report fittizi dei package con solo il nome, chiamando la callback per ciascuno
-            PackageReportImpl packageNameReport = new PackageReportImpl();
-            packageNameReport.setFullPackageName(packageDeclaration.getNameAsString());
-            callback.accept(packageNameReport);
-
-            // classes/interfaces report
-            List<CompilationUnit> classesOrInterfacesUnit = this.createParsedFileList(packageDeclaration)
-                    .stream()
+            // mi prendo i vari package che compongono il progetto
+            List<PackageDeclaration> allCus = parseResultList.stream()
                     .filter(r -> r.getResult().isPresent() && r.isSuccessful())
-                    .map(r -> r.getResult().get()).toList();
+                    .map(r -> r.getResult().get())
+                    .filter(c -> c.getPackageDeclaration().isPresent())
+                    .map(c -> c.getPackageDeclaration().get())
+                    .distinct().toList();
 
-            for (CompilationUnit cu : classesOrInterfacesUnit) {
+            for (PackageDeclaration packageDeclaration : allCus) {
+                // genero report fittizi dei package con solo il nome, chiamando la callback per ciascuno
+                PackageReportImpl packageNameReport = new PackageReportImpl();
+                packageNameReport.setFullPackageName(packageDeclaration.getNameAsString());
 
-                List<ClassOrInterfaceDeclaration> declarationList = cu.getTypes().stream()
-                        .map(TypeDeclaration::asTypeDeclaration)
-                        .filter(BodyDeclaration::isClassOrInterfaceDeclaration)
-                        .map(x -> (ClassOrInterfaceDeclaration) x).toList();
+                // classes/interfaces report
+                List<CompilationUnit> classesOrInterfacesUnit = this.createParsedFileList(packageDeclaration)
+                        .stream()
+                        .filter(r -> r.getResult().isPresent() && r.isSuccessful())
+                        .map(r -> r.getResult().get()).toList();
 
-                for (ClassOrInterfaceDeclaration declaration : declarationList) {
-                    if (declaration.isInterface()) {
-                        this.getInterfaceReport("src/main/java/"+declaration.getFullyQualifiedName().get().replace(".", "/")+".java").onComplete(e -> {
-                                    if(e.succeeded()){
-                                        System.out.println(e.result());
-                                        callback.accept(e.result());
+                for (int i=0; i< classesOrInterfacesUnit.size(); i++) {
+                    final boolean isFirst = i == 0;
+                    CompilationUnit cu = classesOrInterfacesUnit.get(i);
+
+                    List<ClassOrInterfaceDeclaration> declarationList = cu.getTypes().stream()
+                            .map(TypeDeclaration::asTypeDeclaration)
+                            .filter(BodyDeclaration::isClassOrInterfaceDeclaration)
+                            .map(x -> (ClassOrInterfaceDeclaration) x).toList();
+
+
+                    for (ClassOrInterfaceDeclaration declaration : declarationList) {
+                        if (declaration.isInterface()) {
+                            this.getInterfaceReport("src/main/java/"+declaration.getFullyQualifiedName().get().replace(".", "/")+".java").onComplete(e -> {
+                                        if(e.succeeded()){
+                                            if(isFirst){
+                                                callback.accept(packageNameReport);
+                                            }
+                                            callback.accept(e.result());
+                                        }
                                     }
-                                }
-                        );
-                    } else {
-                        this.getClassReport("src/main/java/"+declaration.getFullyQualifiedName().get().replace(".", "/")+".java").onComplete(e -> {
-                                    if(e.succeeded()){
-                                        System.out.println(e.result());
-                                        callback.accept(e.result());
+                            );
+                        } else {
+                            this.getClassReport("src/main/java/"+declaration.getFullyQualifiedName().get().replace(".", "/")+".java").onComplete(e -> {
+                                        if(e.succeeded()){
+                                            if(isFirst){
+                                                callback.accept(packageNameReport);
+                                            }
+                                            callback.accept(e.result());
+                                        }
                                     }
-                                }
-                        );
+                            );
+                        }
                     }
                 }
             }
-        }
-
+        });
     }
 
     private void log(String msg) {
