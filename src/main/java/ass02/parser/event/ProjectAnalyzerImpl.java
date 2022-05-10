@@ -133,31 +133,40 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
 
 
                     for (ClassOrInterfaceDeclaration declaration : declarationList) {
-                        if (declaration.isInterface()) {
-                            this.getInterfaceReport("src/main/java/"+declaration.getFullyQualifiedName().get().replace(".", "/")+".java").onComplete(e -> {
-                                        if(e.succeeded()){
-                                            if(isFirst){
-                                                callback.accept(packageNameReport);
+                        if (this.isRightPackage(packageNameReport.getFullPackageName(), declaration)) {
+                            if (declaration.isInterface()) {
+                                this.getInterfaceReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java").onComplete(e -> {
+                                            if (e.succeeded()) {
+                                                if (isFirst) {
+                                                    callback.accept(packageNameReport);
+                                                }
+                                                callback.accept(e.result());
                                             }
-                                            callback.accept(e.result());
                                         }
-                                    }
-                            );
-                        } else {
-                            this.getClassReport("src/main/java/"+declaration.getFullyQualifiedName().get().replace(".", "/")+".java").onComplete(e -> {
-                                        if(e.succeeded()){
-                                            if(isFirst){
-                                                callback.accept(packageNameReport);
+                                );
+                            } else {
+                                this.getClassReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java").onComplete(e -> {
+                                            if (e.succeeded()) {
+                                                if (isFirst) {
+                                                    callback.accept(packageNameReport);
+                                                }
+                                                callback.accept(e.result());
                                             }
-                                            callback.accept(e.result());
                                         }
-                                    }
-                            );
+                                );
+                            }
                         }
                     }
                 }
             }
         });
+    }
+
+    private boolean isRightPackage(String packageName, ClassOrInterfaceDeclaration declaration) {
+        String classFullName = declaration.getFullyQualifiedName().isPresent() ? declaration.getFullyQualifiedName().get() : "ERROR!";
+        String className = declaration.getNameAsString();
+        classFullName = classFullName.replace("." + className, "");
+        return classFullName.equals(packageName);
     }
 
     private void log(String msg) {

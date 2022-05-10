@@ -120,12 +120,14 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
                                         .map(x -> (ClassOrInterfaceDeclaration) x).toList();
 
                                 for (ClassOrInterfaceDeclaration declaration : declarationList) {
-                                    if (declaration.isInterface()) {
-                                        this.getInterfaceReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
-                                                .blockingSubscribe(report -> emitter.onNext(report.toString()));
-                                    } else {
-                                        this.getClassReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
-                                                .blockingSubscribe(report -> emitter.onNext(report.toString()));
+                                    if(this.isRightPackage(packageNameReport.getFullPackageName(), declaration)){
+                                        if (declaration.isInterface()) {
+                                            this.getInterfaceReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
+                                                    .blockingSubscribe(report -> emitter.onNext(report.toString()));
+                                        } else {
+                                            this.getClassReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
+                                                    .blockingSubscribe(report -> emitter.onNext(report.toString()));
+                                        }
                                     }
                                 }
                             }
@@ -133,8 +135,11 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
                         })));
     }
 
-    private void log(String msg) {
-        System.out.println("[REACTIVE AGENT] " + Thread.currentThread() + msg);
+    private boolean isRightPackage(String packageName, ClassOrInterfaceDeclaration declaration) {
+        String classFullName = declaration.getFullyQualifiedName().isPresent() ? declaration.getFullyQualifiedName().get() : "ERROR!";
+        String className = declaration.getNameAsString();
+        classFullName = classFullName.replace("." + className, "");
+        return classFullName.equals(packageName);
     }
 
         private List<ParseResult<CompilationUnit>> createParsedFileList(PackageDeclaration dec) {
