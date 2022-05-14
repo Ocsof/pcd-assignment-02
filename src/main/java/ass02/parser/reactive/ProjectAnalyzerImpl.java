@@ -27,14 +27,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ProjectAnalyzerImpl implements ProjectAnalyzer {
-
-    private List<String> reportObservable;
-
-
-    public ProjectAnalyzerImpl() {
-        this.reportObservable = new LinkedList<>();
-    }
-
     @Override
     public Maybe<InterfaceReport> getInterfaceReport(String srcInterfacePath) {
         return Maybe.create(emitter -> {
@@ -66,12 +58,6 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
             emitter.onSuccess(classReport);
         });
     }
-
-    @Override
-    public Observable<ProjectReport> getProjectReport(String srcProjectFolderPath) {
-        return null;
-    }
-
     @Override
     public Observable<String> analyzeProject(String srcProjectFolderName) {
 

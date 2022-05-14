@@ -31,15 +31,6 @@ public interface ProjectAnalyzer {
     Maybe<ClassReport> getClassReport(String srcClassPath);
 
     /**
-     * Async method to retrieve the report about a project
-     * given the full path of the project folder
-     *
-     * @param srcProjectFolderPath
-     * @return
-     */
-    Observable<ProjectReport> getProjectReport(String srcProjectFolderPath);
-
-    /**
      * Async function that analyze a project given the full path of the project folder,
      * executing the callback each time a project element is found
      *
