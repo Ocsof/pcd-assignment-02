@@ -11,6 +11,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.utils.SourceRoot;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import ass02.parser.model.collector.ClassCollector;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -47,7 +49,7 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
             InterfaceCollector interfaceCollector = new InterfaceCollector();
             interfaceCollector.visit(compilationUnit, interfaceReport);
             promise.complete(interfaceReport);
-        });
+        }, false);
     }
 
     @Override
@@ -64,7 +66,7 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
             ClassCollector classCollector = new ClassCollector();
             classCollector.visit(compilationUnit, classReport);
             promise.complete(classReport);
-        });
+        }, false);
     }
 
     @Override
@@ -94,6 +96,7 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
     @Override
     public void analyzeProject(String srcProjectFolderName, Consumer<ProjectElem> callback) {
         this.getVertx().executeBlocking(promise -> {
+            this.log("Starting on analyzeProject");
             SourceRoot sourceRoot = new SourceRoot(Paths.get(srcProjectFolderName)).setParserConfiguration(new ParserConfiguration());
             List<ParseResult<CompilationUnit>> parseResultList;
 
@@ -122,10 +125,8 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
                         .filter(r -> r.getResult().isPresent() && r.isSuccessful())
                         .map(r -> r.getResult().get()).toList();
 
-                for (int i=0; i< classesOrInterfacesUnit.size(); i++) {
-                    final boolean isFirst = i == 0;
-                    CompilationUnit cu = classesOrInterfacesUnit.get(i);
-
+                List<Future> packageElements = new ArrayList<>();
+                for (CompilationUnit cu : classesOrInterfacesUnit) {
                     List<ClassOrInterfaceDeclaration> declarationList = cu.getTypes().stream()
                             .map(TypeDeclaration::asTypeDeclaration)
                             .filter(BodyDeclaration::isClassOrInterfaceDeclaration)
@@ -135,6 +136,9 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
                     for (ClassOrInterfaceDeclaration declaration : declarationList) {
                         if (this.isRightPackage(packageNameReport.getFullPackageName(), declaration)) {
                             if (declaration.isInterface()) {
+
+                                packageElements.add(this.getInterfaceReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java"));
+                                /*
                                 this.getInterfaceReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java").onComplete(e -> {
                                             if (e.succeeded()) {
                                                 if (isFirst) {
@@ -143,8 +147,10 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
                                                 callback.accept(e.result());
                                             }
                                         }
-                                );
+                                );*/
                             } else {
+                                packageElements.add(this.getClassReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java"));
+                                /*
                                 this.getClassReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java").onComplete(e -> {
                                             if (e.succeeded()) {
                                                 if (isFirst) {
@@ -153,11 +159,15 @@ public class ProjectAnalyzerImpl extends AbstractVerticle implements ProjectAnal
                                                 callback.accept(e.result());
                                             }
                                         }
-                                );
+                                );*/
                             }
                         }
                     }
                 }
+                CompositeFuture.all(packageElements).onSuccess(res -> {
+                    callback.accept(packageNameReport);
+                    res.list().forEach(e -> callback.accept((ProjectElem) e));
+                });
             }
         });
     }
