@@ -59,7 +59,7 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
         });
     }
     @Override
-    public Observable<String> analyzeProject(String srcProjectFolderName) {
+    public Observable<ProjectElem> analyzeProject(String srcProjectFolderName) {
 
         // mi prendo i vari package che compongono il progetto
         /*
@@ -90,7 +90,7 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
                             System.out.println("[Package exploration] " + Thread.currentThread());
                             PackageReportImpl packageNameReport = new PackageReportImpl();
                             packageNameReport.setFullPackageName(p.getNameAsString());
-                            emitter.onNext(packageNameReport.toString());
+                            emitter.onNext(packageNameReport);
 
                             // classes/interfaces report
                             List<CompilationUnit> classesOrInterfacesUnit = this.createParsedFileList(p)
@@ -109,10 +109,10 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
                                     if(this.isRightPackage(packageNameReport.getFullPackageName(), declaration)){
                                         if (declaration.isInterface()) {
                                             this.getInterfaceReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
-                                                    .blockingSubscribe(report -> emitter.onNext(report.toString()));
+                                                    .blockingSubscribe(emitter::onNext);
                                         } else {
                                             this.getClassReport("src/main/java/" + declaration.getFullyQualifiedName().get().replace(".", "/") + ".java")
-                                                    .blockingSubscribe(report -> emitter.onNext(report.toString()));
+                                                    .blockingSubscribe(emitter::onNext);
                                         }
                                     }
                                 }

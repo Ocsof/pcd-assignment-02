@@ -1,5 +1,6 @@
 package ass02.parser.reactive.view;
 
+import ass02.parser.model.report.ProjectElem;
 import ass02.parser.reactive.ProjectAnalyzerImpl;
 import ass02.parser.reactive.view.ViewFrame;
 import io.reactivex.rxjava3.core.Observable;
@@ -71,23 +72,23 @@ public class ViewController {
         this.view.getTextInterface().setText(String.valueOf(++INTERFACE_NUMBER));
     }
 
-    public void log(String message) {
+    public void log(ProjectElem projectElem) {
         SwingUtilities.invokeLater(() -> {
             int indentation = 0;
-            switch(message.substring(0,3)){
-                case "Cla":
+            switch(projectElem.getType()){
+                case CLASS:
                     this.increaseClassNumber();
                     indentation = 6;
                     break;
-                case "Int":
+                case INTERFACE:
                     this.increaseInterfaceNumber();
                     indentation = 6;
                     break;
-                case "Pac":
+                case PACKAGE:
                     this.increasePackageNumber();
             }
 
-            this.outputConsole.append(message.indent(indentation) + "\n");
+            this.outputConsole.append(projectElem.toString().indent(indentation) + "\n");
         });
     }
 }

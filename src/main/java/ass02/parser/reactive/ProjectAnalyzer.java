@@ -1,9 +1,6 @@
 package ass02.parser.reactive;
 
-import ass02.parser.model.report.ClassReport;
-import ass02.parser.model.report.InterfaceReport;
-import ass02.parser.model.report.PackageReport;
-import ass02.parser.model.report.ProjectReport;
+import ass02.parser.model.report.*;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
@@ -36,5 +33,5 @@ public interface ProjectAnalyzer {
      *
      * @param srcProjectFolderName
      */
-    Observable<String> analyzeProject(String srcProjectFolderName);
+    Observable<ProjectElem> analyzeProject(String srcProjectFolderName);
 }

@@ -52,4 +52,9 @@ public class ClassReportImpl implements ClassReport {
                 "Methods: " + methodsInfo + '\n' +
                 "Fields: " + fieldsInfo + '\n' + '\n';
     }
+
+    @Override
+    public Type getType() {
+        return Type.CLASS;
+    }
 }

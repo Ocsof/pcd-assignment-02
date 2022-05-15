@@ -1,6 +1,7 @@
 package ass02.parser.event.view;
 
 import ass02.parser.event.ProjectAnalyzerImpl;
+import ass02.parser.model.report.ProjectElem;
 import io.vertx.core.Vertx;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -40,7 +41,7 @@ public class ViewController {
             this.view.getTextClass().setText("0");
             this.view.getTextInterface().setText("0");
             this.view.getTextPackage().setText("0");
-            this.projectAnalyzer.analyzeProject(this.projectPath, (k) -> this.log(k.toString()));
+            this.projectAnalyzer.analyzeProject(this.projectPath, (k) -> this.log(k));
         }
     }
 
@@ -64,21 +65,20 @@ public class ViewController {
         this.view.getTextInterface().setText(String.valueOf(++INTERFACE_NUMBER));
     }
 
-    public void log(String message) {
+    public void log(ProjectElem projectElem) {
         int indentation = 0;
-        switch(message.substring(0,3)){
-            case "Cla":
+        switch(projectElem.getType()){
+            case CLASS:
                     this.increaseClassNumber();
                     indentation = 6;
                     break;
-            case "Int":
+            case INTERFACE:
                     this.increaseInterfaceNumber();
                     indentation = 6;
                     break;
-            case "Pac":
+            case PACKAGE:
                     this.increasePackageNumber();
         }
-
-        this.outputConsole.append(message.indent(indentation) + "\n");
+        this.outputConsole.append(projectElem.toString().indent(indentation) + "\n");
     }
 }

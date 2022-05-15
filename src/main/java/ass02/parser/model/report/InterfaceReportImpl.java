@@ -42,4 +42,9 @@ public class InterfaceReportImpl implements InterfaceReport {
                 "File Name: " + fullFileName + '\n' +
                 "Methods: " + methodNameList + '\n' + '\n';
     }
+
+    @Override
+    public Type getType() {
+        return Type.INTERFACE;
+    }
 }

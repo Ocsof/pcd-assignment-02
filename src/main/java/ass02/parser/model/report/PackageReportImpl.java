@@ -44,4 +44,9 @@ public class PackageReportImpl implements PackageReport {
                 "Classes: " + classReports.toString() + '\n' +
                 "Interfaces: " + interfaceReports.toString() + '\n' + '\n';
     }
+
+    @Override
+    public Type getType() {
+        return Type.PACKAGE;
+    }
 }

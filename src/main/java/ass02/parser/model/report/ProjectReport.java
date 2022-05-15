@@ -1,11 +1,10 @@
 package ass02.parser.model.report;
 
 import com.github.javaparser.utils.Pair;
-import ass02.parser.event.ProjectElem;
 
 import java.util.List;
 
-public interface ProjectReport extends ProjectElem {
+public interface ProjectReport {
 
     List<PackageReport> getPackageReport();
 
