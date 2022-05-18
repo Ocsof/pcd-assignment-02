@@ -39,6 +39,7 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
                     InterfaceReportImpl interfaceReport = new InterfaceReportImpl();
                     InterfaceCollector interfaceCollector = new InterfaceCollector();
                     interfaceCollector.visit(compilationUnit, interfaceReport);
+                    System.out.println("[Interface visit] " + Thread.currentThread());
                     emitter.onSuccess(interfaceReport);
                 });
     }
@@ -55,6 +56,7 @@ public class ProjectAnalyzerImpl implements ProjectAnalyzer {
             ClassReportImpl classReport = new ClassReportImpl();
             ClassCollector classCollector = new ClassCollector();
             classCollector.visit(compilationUnit, classReport);
+            System.out.println("[Class visit] " + Thread.currentThread());
             emitter.onSuccess(classReport);
         });
     }
